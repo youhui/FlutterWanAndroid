@@ -197,21 +197,19 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildSignIn(BuildContext context) {
-    
+
     Future<Null> _login() async {
       String username = loginEmailController.text;
       String password = loginPasswordController.text;
       if ((null != username && username.trim().length > 0) && (null != password && password.trim().length > 0)) {
         ApiService().login((UserModel _userModel, Response response) {
-          if (_userModel != null) {
+          if (_userModel.errorCode == 0) {
             User().saveUserInfo(_userModel, response);
             Application.eventBus.fire(new LoginEvent());
-            if (_userModel.errorCode == 0) {
-              Fluttertoast.showToast(msg: "登录成功！");
-              Navigator.of(context).pop();
-            } else {
-              Fluttertoast.showToast(msg: _userModel.errorMsg);
-            }
+            Fluttertoast.showToast(msg: "登录成功！");
+            Navigator.of(context).pop();
+          } else {
+            Fluttertoast.showToast(msg: _userModel.errorMsg);
           }
         }, username, password);
       } else {
@@ -220,6 +218,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         );
       }
     }
+
+    var width = MediaQuery.of(context).size.width;
 
     return Container(
       padding: EdgeInsets.only(top: 23.0),
@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Container(
-                  width: 300.0,
+                  width: width - 30,
                   height: 150.0,
                   child: Column(
                     children: <Widget>[
@@ -260,7 +260,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                       ),
                       Container(
-                        width: 250.0,
+                        width: width - 90,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
@@ -296,24 +296,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 240.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: const Color(0xFFffffff),
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: const Color(0xFFffffff),
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  gradient: new LinearGradient(
-                      colors: [Color(0xFFffffff), Color(0xFFffffff)], begin: const FractionalOffset(0.2, 0.2), end: const FractionalOffset(1.0, 1.0), stops: [0.0, 1.0], tileMode: TileMode.clamp),
-                ),
+                margin: EdgeInsets.only(top: 220.0),
                 child: FlatButton(
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
@@ -323,12 +306,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         borderRadius: BorderRadius.circular(30)),
                     color: themeColor,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 60.0),
+                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 140.0),
                       child: Text(
                         "登录",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.0,
+                          fontSize: 16.0,
                         ),
                       ),
                     ),
@@ -344,7 +327,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildSignUp(BuildContext context) {
-    
     Future<Null> _regist() async {
       String username = signupNameController.text;
       String password = signupPasswordController.text;
@@ -371,6 +353,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       }
     }
 
+    var width = MediaQuery.of(context).size.width;
+
     return Container(
       padding: EdgeInsets.only(top: 23.0),
       child: Column(
@@ -386,7 +370,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Container(
-                  width: 300.0,
+                  width: width - 30,
                   height: 210.0,
                   child: Column(
                     children: <Widget>[
@@ -410,7 +394,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                       ),
                       Container(
-                        width: 250.0,
+                        width: width - 90,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
@@ -441,7 +425,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                       ),
                       Container(
-                        width: 250.0,
+                        width: width - 90,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
@@ -475,7 +459,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 340.0),
+                margin: EdgeInsets.only(top: 280.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 ),
@@ -488,10 +472,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         borderRadius: BorderRadius.circular(30)),
                     color: themeColor,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 60.0),
+                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 140.0),
                       child: Text(
                         "注册",
-                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     ),
                     onPressed: () {
